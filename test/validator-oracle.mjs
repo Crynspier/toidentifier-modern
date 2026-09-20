@@ -72,12 +72,12 @@ const explicitValid = [
   '_',
   '你好',
   'é',
-  'foo\\u0301',
-  'foo\\u200Cbar',
-  'foo\\u200Dbar',
-  'foo\\u200C',
-  'foo\\u200D',
-  'a\\u0301\\u0323',
+  'foó',
+  'foo‌bar',
+  'foo‍bar',
+  'foo‌',
+  'foo‍',
+  'ạ́',
   '𝔘𝔫𝔦𝔠𝔬𝔡𝔢',
 ]
 
@@ -87,10 +87,10 @@ const explicitInvalid = [
   '123',
   'foo-bar',
   'foo.bar',
-  'foo\\u200Bbar',
-  '\\u0301foo',
-  '\\u200Cfoo',
-  '\\u200Dfoo',
+  'foo​bar',
+  '́foo',
+  '‌foo',
+  '‍foo',
   '💩',
   'class',
   'yield',
@@ -136,7 +136,7 @@ test('isValidIdentifier agrees with the module reserved-word contract', () => {
 })
 
 test('isValidIdentifier agrees with the JavaScript parser across a structured candidate corpus', () => {
-  const alphabet = ['a', 'A', '0', '_', '$', '-', '.', 'é', '你', '\\u0301', '\\u200B', '\\u200C', '\\u200D']
+  const alphabet = ['a', 'A', '0', '_', '$', '-', '.', 'é', '你', '́', '​', '‌', '‍']
   const candidates = []
 
   const visit = (value, depth, maxDepth) => {
