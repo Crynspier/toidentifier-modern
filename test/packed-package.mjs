@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 const node = process.execPath
+const npmCli = process.env.npm_execpath
 const tsc = resolve(root, 'node_modules', 'typescript', 'bin', 'tsc')
 
 function run(command, args, options = {}) {
@@ -14,7 +14,6 @@ function run(command, args, options = {}) {
     cwd: root,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
-    shell: process.platform === 'win32' && command.toLowerCase().endsWith('.cmd'),
     ...options,
   })
 
@@ -28,7 +27,15 @@ function run(command, args, options = {}) {
   return result.stdout
 }
 
-const packJson = run(npm, ['pack', '--json', '--ignore-scripts'])
+function runNpm(args, options = {}) {
+  if (!npmCli) {
+    throw new Error('npm_execpath is unavailable; run this test through npm so the npm CLI can be invoked portably.')
+  }
+
+  return run(node, [npmCli, ...args], options)
+}
+
+const packJson = runNpm(['pack', '--json', '--ignore-scripts'])
 const packResult = JSON.parse(packJson)[0]
 assert.ok(packResult?.filename, 'npm pack did not return a tarball filename')
 
@@ -79,7 +86,7 @@ try {
     }, null, 2) + '\n',
   )
 
-  run(npm, ['install', tarball, '--ignore-scripts', '--package-lock=false'], { cwd: consumer })
+  runNpm(['install', tarball, '--ignore-scripts', '--package-lock=false'], { cwd: consumer })
 
   await writeFile(
     resolve(consumer, 'esm-test.mjs'),
@@ -121,7 +128,7 @@ void b
 
   run(node, [resolve(consumer, 'esm-test.mjs')], { cwd: consumer })
   run(node, [resolve(consumer, 'cjs-test.cjs')], { cwd: consumer })
-  run(tsc, ['--project', resolve(consumer, 'tsconfig.json')], { cwd: consumer })
+  run(node, [tsc, '--project', resolve(consumer, 'tsconfig.json')], { cwd: consumer })
 
   const installedPackageJson = JSON.parse(
     await readFile(resolve(consumer, 'node_modules', 'toidentifier-modern', 'package.json'), 'utf8'),
