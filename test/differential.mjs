@@ -15,6 +15,11 @@ const samples = [
   'مرحبا world', 'שלום world', 'ＡＢＣ test', 'e\u0301 test',
   '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test', '\u200B hidden', '\u202E rtl', 'A B C',
   'a1 b2 c3', '!!!', '   ',
+  '\uD800', '\uDC00', '\uD83D\uDE00', '\uDBFF\uDFFF',
+  '\uFEFF BOM', '\u0000null', '\u0001control', '\u007Fdelete',
+  '\u0085next-line', '\u2028line-separator', '\u2029paragraph-separator',
+  '\u2060word-joiner', '\u200Bzero-width-space',
+  'a\\u0000b\\u0001c\\u007Fd', '💩💩💩',
 ]
 
 function deterministicStrings(count) {
@@ -52,6 +57,13 @@ test('legacy helper matches published toidentifier@1.0.1 across 5000 determinist
   for (const input of differentialInputs) {
     assert.equal(toIdentifierLegacy(input), legacy(input), JSON.stringify(input))
   }
+})
+
+test('legacy helper matches the published package on a long adversarial input', () => {
+  const chunk = '😀 café \\uD800 \\uDC00 你好 \\u0301 ABC_123 \\u0000 -/@'
+  const input = chunk.repeat(2048)
+
+  assert.equal(toIdentifierLegacy(input), legacy(input))
 })
 
 test('legacy helper preserves the legacy non-string runtime error', () => {
