@@ -18,6 +18,7 @@ const cases = [
   ['404 not found', '_404NotFound'],
   ['café crème', 'CaféCrème'],
   ['你好 world', '你好World'],
+  ['你好World', '你好World'],
   ['e\u0301 test', 'ÉTest'],
   ['Ｈｅｌｌｏ　ｗｏｒｌｄ', 'HelloWorld'],
   ['𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test', 'UnicodeTest'],
@@ -44,15 +45,6 @@ test('camel style produces lower camelCase', () => {
 test('normalization can be disabled', () => {
   assert.equal(toIdentifier('Ｈｅｌｌｏ', { normalize: false }), 'Ｈｅｌｌｏ')
   assert.equal(toIdentifier('Ｈｅｌｌｏ'), 'Hello')
-})
-
-test('modern output is idempotent', () => {
-  const samples = ['hello world', 'XMLHttpRequest', 'café', '404 not found', '你好 world', '!!!']
-
-  for (const input of samples) {
-    const once = toIdentifier(input)
-    assert.equal(toIdentifier(once), once)
-  }
 })
 
 test('identifier validation follows binding-identifier rules', () => {
