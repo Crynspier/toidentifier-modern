@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.2.0 - 2026-09-20
+
+### Changed
+
+- Changed the default `toIdentifier()` semantics from exact legacy compatibility to modern identifier conversion.
+- Added Unicode NFKC normalization by default.
+- Added whitespace, punctuation, and underscore word boundaries.
+- Added camelCase boundary detection and acronym splitting.
+- Added strict/module-safe identifier validity guarantees.
+- Added PascalCase (default) and camelCase output styles.
+- Added reserved-word protection and leading-underscore fallback behavior.
+- Updated documentation to make semantic compatibility boundaries explicit.
+
+### Added
+
+- `isValidIdentifier()`.
+- `toIdentifierLegacy()` for exact `toidentifier@1.0.1` behavior.
+- `MODERN_SPEC.md`.
+- `MIGRATION.md`.
+- Modern validity and idempotence regression tests.
+- Expanded packed-package API tests.
+
+### Compatibility
+
+This is an intentional semantic breaking release from 0.1.x. Consumers that require the historical default behavior should use `toIdentifierLegacy()` or remain on 0.1.1.
+
 ## 0.1.1 - 2026-09-20
 
 ### Changed
@@ -21,7 +47,7 @@
 
 ## 0.1.0 - 2026-09-20
 
-Initial modern compatibility release targeting the published toidentifier@1.0.1 behavior.
+Initial modern compatibility release targeting the published `toidentifier@1.0.1` behavior.
 
 ### Added
 
