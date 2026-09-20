@@ -26,7 +26,7 @@ Convert arbitrary text into a deterministic, readable JavaScript binding identif
 
 `isValidIdentifier()` checks JavaScript binding-identifier safety using Unicode identifier properties plus modern strict/module restrictions relevant to variable bindings.
 
-The implementation validates the actual string value and does not treat Unicode escape spellings as a separate identifier representation. The validator is regression-tested against the JavaScript parser for thousands of generated candidates, with additional module-parser checks for module-reserved binding names.
+The implementation validates the actual string value and does not treat Unicode escape spellings as a separate identifier representation. The validator is regression-tested against the JavaScript parser for thousands of generated candidates and an independent structured candidate corpus, with additional module-reserved binding checks.
 
 The converter does not promise idempotence: concatenating separate single-letter words can create a different case-boundary interpretation on a subsequent pass.
 
