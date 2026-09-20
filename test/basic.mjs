@@ -26,6 +26,8 @@ const cases = [
   ['', '_'],
   ['$value', '$Value'],
   ['foo$bar', 'Foo$Bar'],
+  ['foo\u200Cbar', 'Foo\u200Cbar'],
+  ['foo\u200Dbar', 'Foo\u200Dbar'],
 ]
 
 for (const [input, expected] of cases) {
@@ -48,7 +50,7 @@ test('normalization can be disabled', () => {
 })
 
 test('identifier validation follows binding-identifier rules', () => {
-  for (const value of ['foo', '_foo', '$foo', '你好', 'FooBar']) {
+  for (const value of ['foo', '_foo', '$foo', '你好', 'FooBar', 'foo\u200Cbar', 'foo\u200Dbar']) {
     assert.equal(isValidIdentifier(value), true, value)
   }
 
