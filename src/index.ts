@@ -41,17 +41,33 @@ function isUppercaseLetter(char: string): boolean {
   return UPPERCASE_LETTER.test(char)
 }
 
-function shouldSplitCamelBoundary(previous: string, current: string, next?: string): boolean {
+function isCasedLetter(char: string): boolean {
+  return isLowercaseLetter(char) || isUppercaseLetter(char)
+}
+
+function shouldSplitBoundary(previous: string, current: string, next?: string): boolean {
   if (isLowercaseLetter(previous) && isUppercaseLetter(current)) {
     return true
   }
 
-  return (
+  if (
     isUppercaseLetter(previous) &&
     isUppercaseLetter(current) &&
     next !== undefined &&
     isLowercaseLetter(next)
-  )
+  ) {
+    return true
+  }
+
+  if (
+    isIdentifierStartChar(previous) &&
+    isIdentifierStartChar(current) &&
+    isCasedLetter(previous) !== isCasedLetter(current)
+  ) {
+    return true
+  }
+
+  return false
 }
 
 function splitWords(input: string): string[] {
@@ -84,7 +100,7 @@ function splitWords(input: string): string[] {
     const previous = current[current.length - 1]
     const next = chars[index + 1]
 
-    if (previous !== undefined && shouldSplitCamelBoundary(previous, char, next)) {
+    if (previous !== undefined && shouldSplitBoundary(previous, char, next)) {
       flush()
     }
 
