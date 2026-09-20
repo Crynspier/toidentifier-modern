@@ -11,12 +11,13 @@
 - The final filter removes characters outside ASCII letters, digits, and `_`.
 - Runtime errors for invalid non-string inputs remain observable rather than being replaced with custom coercion.
 
-## Modern additions
+## Modern additions and intentional differences
 
 - ESM entrypoint.
 - First-party TypeScript declarations.
 - Explicit `exports` map.
 - CommonJS compatibility shim generated from the TypeScript source.
+- Node runtime floor is >=18 rather than the legacy package's much older engine range.
 - Cross-platform Node 18–26 CI on Linux, Windows, and macOS.
 - macOS Intel smoke testing in addition to the primary macOS ARM64 runner.
 
