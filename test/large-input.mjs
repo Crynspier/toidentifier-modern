@@ -9,3 +9,11 @@ for (const size of [1024, 64 * 1024, 1024 * 1024]) {
     assert.equal(isValidIdentifier(output), true)
   })
 }
+
+test('handles pathological leading combining marks linearly', () => {
+  const input = '\u0301'.repeat(100_000) + 'foo'
+  const output = toIdentifier(input)
+
+  assert.equal(output, 'Foo')
+  assert.equal(isValidIdentifier(output), true)
+})
