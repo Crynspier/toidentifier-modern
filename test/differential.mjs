@@ -39,7 +39,7 @@ const samples = [
 
 function deterministicStrings(count) {
   let state = 0x12345678
-  const alphabet = ' abcXYZ012_-.@/\\\\\\t\\n😀éß你好'
+  const alphabet = ' abcXYZ012_-.@/' + String.fromCharCode(92, 9, 10) + '😀éß你好'
   const result = []
 
   for (let i = 0; i < count; i += 1) {
