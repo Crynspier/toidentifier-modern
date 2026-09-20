@@ -1,35 +1,38 @@
 # Compatibility with toidentifier 1.0.1
 
-`toidentifier-modern` targets the published `toidentifier@1.0.1` package. The compatibility suite executes the modern implementation and the installed reference package on the same explicit inputs and a deterministic Unicode corpus.
+Version 0.2.x does not claim that the modern default is behavior-compatible with the historical package.
 
-## Preserved behavior
+Instead, exact historical behavior is exposed as the named `toIdentifierLegacy` helper.
 
-- CommonJS package root remains a callable single function.
-- Literal U+0020 spaces are the only word separators.
-- The first character of each token is uppercased before concatenation.
-- Tokens are joined without a separator.
-- The final filter removes characters outside ASCII letters, digits, and `_`.
-- Runtime errors for invalid non-string inputs remain observable rather than being replaced with custom coercion.
+## Legacy guarantees
 
-## Modern additions and intentional differences
+`toIdentifierLegacy` targets the published `toidentifier@1.0.1` package:
+
+- split words only on literal U+0020 spaces;
+- uppercase the first character of every token;
+- concatenate tokens;
+- remove characters outside ASCII letters, digits, and `_`;
+- preserve the legacy runtime behavior for invalid non-string inputs.
+
+The compatibility suite compares `toIdentifierLegacy` directly with the installed reference package across explicit edge cases and a deterministic 5,000-input Unicode corpus.
+
+## Modern default
+
+The default `toIdentifier` is intentionally different and provides:
+
+- Unicode-aware NFKC normalization;
+- punctuation and whitespace word boundaries;
+- camelCase/PascalCase boundary detection;
+- Unicode identifier preservation;
+- strict/module-safe binding-identifier validity;
+- reserved-word avoidance;
+- PascalCase and camelCase styles.
+
+## Packaging compatibility
 
 - ESM entrypoint.
-- Named ESM export.
+- CommonJS package root remains callable.
 - First-party TypeScript declarations.
 - Explicit `exports` map.
-- CommonJS compatibility shim generated from the TypeScript source.
-- Node runtime floor is >=18 rather than the legacy package's much older engine range.
-- Cross-platform Node 18–26 CI on Linux, Windows, and macOS.
-- macOS Intel smoke testing in addition to the primary macOS ARM64 runner.
-- The packed package is tested as a fresh ESM, CommonJS, and TypeScript consumer.
-
-## Not part of the compatibility promise
-
-- Undocumented deep imports into package internals.
-- Exact CommonJS function object property shape beyond callable root usage.
-- Support for Node versions below 18.
-- General JavaScript identifier validation.
-
-## Intentional non-features
-
-The package does not attempt to become a general identifier or casing library. It deliberately does not add Unicode normalization, transliteration, generic whitespace handling, or arbitrary runtime value coercion.
+- Node runtime floor is >=18.
+- Deep imports are not part of the public contract.
