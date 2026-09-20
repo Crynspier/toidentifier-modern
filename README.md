@@ -128,6 +128,7 @@ Generic casing libraries such as `camelcase` and `change-case` already cover bro
 - exact legacy compatibility helper
 - deterministic 10,000-input modern validity corpus
 - parser-backed strict-binding verification across 5,000 generated candidates
+- independent validator/parser differential coverage across a structured Unicode candidate corpus
 - module-parser checks for reserved binding words
 - adversarial Unicode, normalization, boundary, and collision coverage
 - 5,000-input legacy differential corpus
