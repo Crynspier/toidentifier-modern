@@ -181,12 +181,46 @@ function makeValidIdentifier(value: string): string {
   return value
 }
 
+function validateOptions(options: ToIdentifierOptions | undefined): {
+  style: IdentifierStyle
+  normalize: boolean
+} {
+  if (options === undefined) {
+    return { style: 'pascal', normalize: true }
+  }
+
+  if (typeof options !== 'object' || options === null || Array.isArray(options)) {
+    throw new TypeError('options must be an object')
+  }
+
+  if (
+    options.style !== undefined &&
+    options.style !== 'pascal' &&
+    options.style !== 'camel'
+  ) {
+    throw new TypeError('options.style must be "pascal" or "camel"')
+  }
+
+  if (options.normalize !== undefined && typeof options.normalize !== 'boolean') {
+    throw new TypeError('options.normalize must be a boolean')
+  }
+
+  return {
+    style: options.style ?? 'pascal',
+    normalize: options.normalize ?? true,
+  }
+}
+
 export function toIdentifier(
   input: string,
-  options: ToIdentifierOptions = {},
+  options?: ToIdentifierOptions,
 ): string {
-  const style = options.style ?? 'pascal'
-  const normalized = options.normalize === false ? input : input.normalize('NFKC')
+  if (typeof input !== 'string') {
+    throw new TypeError('input must be a string')
+  }
+
+  const { style, normalize } = validateOptions(options)
+  const normalized = normalize ? input.normalize('NFKC') : input
   const transformed = transformWords(splitWords(normalized), style)
 
   return makeValidIdentifier(transformed)
