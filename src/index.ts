@@ -26,8 +26,8 @@ function isIdentifierStartChar(char: string): boolean {
 }
 
 function isIdentifierContinueChar(char: string): boolean {
-  return char === '
-
+  return char === '$' || char === '\u200C' || char === '\u200D' || IDENTIFIER_CONTINUE.test(char)
+}
 function isDecimalNumber(char: string): boolean {
   return DECIMAL_NUMBER.test(char)
 }
