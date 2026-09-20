@@ -141,7 +141,6 @@ try {
     await readFile(resolve(consumer, 'node_modules', 'toidentifier-modern', 'package.json'), 'utf8'),
   )
   assert.equal(installedPackageJson.version, packResult.version)
-  assert.equal(installedPackageJson.version, '0.2.0')
 } finally {
   await rm(tarball, { force: true })
   await rm(consumer, { recursive: true, force: true })
