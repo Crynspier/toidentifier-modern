@@ -52,7 +52,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.types.json --noEmit",
     "format:check": "node scripts/lint.mjs",
     "lint": "npm run format:check",
-    "test": "npm run build && node --test test/basic.mjs test/modern-contract.mjs test/parser.mjs test/differential.mjs test/fuzz.mjs test/large-input.mjs test/packed-package.mjs",
+    "test": "npm run build && node --test test/basic.mjs test/modern-contract.mjs test/parser.mjs test/validator-oracle.mjs test/differential.mjs test/fuzz.mjs test/large-input.mjs test/packed-package.mjs",
     "check": "npm run typecheck && npm run format:check && npm test",
     "pack:check": "npm run check && npm pack --dry-run --ignore-scripts"
   },
