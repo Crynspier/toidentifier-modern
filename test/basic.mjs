@@ -78,5 +78,8 @@ test('CommonJS export is a callable modern function', () => {
   const cjs = require('../dist/index.cjs')
   assert.equal(typeof cjs, 'function')
   assert.equal(cjs('hello-world'), 'HelloWorld')
+  assert.equal(cjs.toIdentifier('hello-world'), 'HelloWorld')
+  assert.equal(cjs.toIdentifierLegacy('hello-world'), 'Helloworld')
+  assert.equal(cjs.isValidIdentifier('_404NotFound'), true)
   assert.equal(Object.keys(cjs).length, 0)
 })
