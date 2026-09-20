@@ -1,0 +1,64 @@
+{
+  "name": "toidentifier-modern",
+  "version": "0.1.0",
+  "description": "Modern, dependency-free TypeScript-first implementation of the toidentifier@1.0.1 API with ESM, CommonJS, and first-party types.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "COMPATIBILITY.md",
+    "SECURITY.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "sideEffects": false,
+  "keywords": [
+    "toidentifier",
+    "identifier",
+    "javascript",
+    "typescript",
+    "string",
+    "string-utils",
+    "utility",
+    "nodejs",
+    "esm",
+    "commonjs"
+  ],
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "node scripts/build.mjs",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run check && npm pack --dry-run",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.types.json --noEmit",
+    "lint": "node scripts/lint.mjs",
+    "test": "npm run build && node --test test/basic.mjs test/differential.mjs test/fuzz.mjs",
+    "check": "npm run typecheck && npm run lint && npm test",
+    "pack:check": "npm run check && npm pack --dry-run"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "toidentifier": "1.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crynspier/toidentifier-modern.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Crynspier/toidentifier-modern/issues"
+  },
+  "homepage": "https://github.com/Crynspier/toidentifier-modern#readme"
+}
