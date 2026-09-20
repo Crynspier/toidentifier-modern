@@ -1,49 +1,20 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { createRequire } from 'node:module'
-import toIdentifier from '../dist/index.js'
+import { toIdentifierLegacy } from '../dist/index.js'
 
 const require = createRequire(import.meta.url)
 const legacy = require('toidentifier')
 
 const samples = [
-  '',
-  'hello',
-  'Bad Request',
-  'hello world',
-  'hello  world',
-  ' hello ',
-  'hello\tworld',
-  'hello\nworld',
-  'hello\r\nworld',
-  'hello-world',
-  'hello.world',
-  'hello/world',
-  'hello@world',
-  '404 not found',
-  'v1 test',
-  'hello_world',
-  '_hello',
-  'hello_',
-  'café',
-  'über test',
-  '你好 world',
-  '😀 hello',
-  'ß test',
-  'İ test',
-  'Αθήνα test',
-  'Москва test',
-  'مرحبا world',
-  'שלום world',
-  'ＡＢＣ test',
-  'e\u0301 test',
-  '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test',
-  '\u200B hidden',
-  '\u202E rtl',
-  'A B C',
-  'a1 b2 c3',
-  '!!!',
-  '   ',
+  '', 'hello', 'Bad Request', 'hello world', 'hello  world', ' hello ',
+  'hello\tworld', 'hello\nworld', 'hello\r\nworld', 'hello-world',
+  'hello.world', 'hello/world', 'hello@world', '404 not found', 'v1 test',
+  'hello_world', '_hello', 'hello_', 'café', 'über test', '你好 world',
+  '😀 hello', 'ß test', 'İ test', 'Αθήνα test', 'Москва test',
+  'مرحبا world', 'שלום world', 'ＡＢＣ test', 'e\u0301 test',
+  '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test', '\u200B hidden', '\u202E rtl', 'A B C',
+  'a1 b2 c3', '!!!', '   ',
 ]
 
 function deterministicStrings(count) {
@@ -70,24 +41,22 @@ function deterministicStrings(count) {
 }
 
 for (const input of samples) {
-  test(`matches legacy for ${JSON.stringify(input)}`, () => {
-    assert.equal(toIdentifier(input), legacy(input))
+  test('legacy compatibility for ' + JSON.stringify(input), () => {
+    assert.equal(toIdentifierLegacy(input), legacy(input))
   })
 }
 
 const differentialInputs = deterministicStrings(5000)
 
-test('matches legacy across deterministic 5000-input Unicode differential corpus', () => {
+test('legacy helper matches published toidentifier@1.0.1 across 5000 deterministic inputs', () => {
   for (const input of differentialInputs) {
-    assert.equal(toIdentifier(input), legacy(input), JSON.stringify(input))
+    assert.equal(toIdentifierLegacy(input), legacy(input), JSON.stringify(input))
   }
 })
 
-test('matches legacy runtime errors for a non-string input', () => {
-  assert.throws(() => toIdentifier(123), (modernError) => {
-    assert.throws(() => legacy(123), (legacyError) => {
-      return modernError.constructor === legacyError.constructor
-    })
+test('legacy helper preserves the legacy non-string runtime error', () => {
+  assert.throws(() => toIdentifierLegacy(123), (modernError) => {
+    assert.throws(() => legacy(123), (legacyError) => modernError.constructor === legacyError.constructor)
     return true
   })
 })
