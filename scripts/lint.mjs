@@ -9,6 +9,7 @@ const files = [
   'test/differential.mjs',
   'test/fuzz.mjs',
   'test/large-input.mjs',
+  'test/validator-oracle.mjs',
   'test/packed-package.mjs',
 ]
 
