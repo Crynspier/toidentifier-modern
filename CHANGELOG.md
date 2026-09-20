@@ -7,6 +7,7 @@
 - Removed a repeated-array-shift path from leading invalid-character trimming, preventing quadratic behavior on pathological Unicode inputs.
 - Added regression coverage with 100,000 leading combining marks.
 - Renamed the internal format-check script to reflect its actual scope while retaining `npm run lint` as a compatibility alias.
+- Removed a hardcoded package-version assertion from the packed-package test so future patch releases do not require test edits.
 
 ### Compatibility
 
