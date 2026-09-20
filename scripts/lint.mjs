@@ -8,6 +8,8 @@ const files = [
   'test/basic.mjs',
   'test/differential.mjs',
   'test/fuzz.mjs',
+  'test/large-input.mjs',
+  'test/packed-package.mjs',
 ]
 
 for (const relative of files) {
@@ -17,4 +19,4 @@ for (const relative of files) {
   }
 }
 
-console.log(`lint checks passed for ${files.length} JavaScript files`)
+console.log(`format check passed for ${files.length} JavaScript files`)
