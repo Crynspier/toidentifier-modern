@@ -53,6 +53,12 @@ const requiredFiles = new Set([
   'dist/index.d.ts',
 ])
 
+const allowedTopLevelFiles = new Set([
+  ...requiredFiles,
+  'dist/index.js.map',
+  'dist/index.d.ts.map',
+])
+
 for (const file of requiredFiles) {
   assert.ok(packResult.files.some((entry) => entry.path === file), 'missing packed file: ' + file)
 }
@@ -62,6 +68,12 @@ for (const file of packResult.files.map((entry) => entry.path)) {
   assert.equal(file.startsWith('scripts/'), false, 'scripts leaked into package: ' + file)
   assert.equal(file.startsWith('.github/'), false, 'CI files leaked into package: ' + file)
   assert.equal(file.startsWith('node_modules/'), false, 'node_modules leaked into package: ' + file)
+
+  if (file.startsWith('dist/')) {
+    assert.equal(allowedTopLevelFiles.has(file), true, 'unexpected dist file: ' + file)
+  } else {
+    assert.equal(allowedTopLevelFiles.has(file), true, 'unexpected packed file: ' + file)
+  }
 }
 
 const consumer = await mkdtemp(resolve(root, '.tmp-packed-consumer-'))
