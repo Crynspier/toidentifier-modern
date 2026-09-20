@@ -19,7 +19,7 @@
 - `toIdentifierLegacy()` for exact `toidentifier@1.0.1` behavior.
 - `MODERN_SPEC.md`.
 - `MIGRATION.md`.
-- Modern validity and idempotence regression tests.
+- Modern validity and case-boundary regression tests.
 - Expanded packed-package API tests.
 
 ### Compatibility
