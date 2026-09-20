@@ -11,59 +11,6 @@ function parsesStrictBinding(candidate) {
   }
 }
 
-function isValidModuleBinding(candidate) {
-  return ![
-    'await',
-    'break',
-    'case',
-    'catch',
-    'class',
-    'const',
-    'continue',
-    'debugger',
-    'default',
-    'delete',
-    'do',
-    'else',
-    'enum',
-    'export',
-    'extends',
-    'false',
-    'finally',
-    'for',
-    'function',
-    'if',
-    'import',
-    'in',
-    'instanceof',
-    'let',
-    'new',
-    'null',
-    'return',
-    'super',
-    'switch',
-    'this',
-    'throw',
-    'true',
-    'try',
-    'typeof',
-    'var',
-    'void',
-    'while',
-    'with',
-    'yield',
-    'static',
-    'implements',
-    'interface',
-    'package',
-    'private',
-    'protected',
-    'public',
-    'arguments',
-    'eval',
-  ].includes(candidate)
-}
-
 const explicitValid = [
   'foo',
   '_foo',
@@ -110,7 +57,7 @@ test('isValidIdentifier agrees with the strict JavaScript parser on explicit can
   }
 })
 
-test('isValidIdentifier agrees with the module reserved-word contract', () => {
+test('isValidIdentifier agrees with the module parser for reserved binding names', async () => {
   const moduleReserved = [
     'await',
     'yield',
@@ -130,8 +77,11 @@ test('isValidIdentifier agrees with the module reserved-word contract', () => {
   ]
 
   for (const candidate of moduleReserved) {
+    await assert.rejects(
+      import('data:text/javascript,' + encodeURIComponent('const ' + candidate + ' = 1')),
+      SyntaxError,
+    )
     assert.equal(isValidIdentifier(candidate), false, JSON.stringify(candidate))
-    assert.equal(isValidModuleBinding(candidate), false, JSON.stringify(candidate))
   }
 })
 
