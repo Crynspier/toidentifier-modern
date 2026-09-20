@@ -1,10 +1,10 @@
 # Compatibility with toidentifier 1.0.1
 
-`toidentifier-modern` targets the published toidentifier@1.0.1 package. The compatibility suite executes the modern implementation and the installed reference package on the same input corpus.
+`toidentifier-modern` targets the published `toidentifier@1.0.1` package. The compatibility suite executes the modern implementation and the installed reference package on the same explicit inputs and a deterministic Unicode corpus.
 
 ## Preserved behavior
 
-- CommonJS package exposes one callable default function.
+- CommonJS package root remains a callable single function.
 - Literal U+0020 spaces are the only word separators.
 - The first character of each token is uppercased before concatenation.
 - Tokens are joined without a separator.
@@ -14,12 +14,21 @@
 ## Modern additions and intentional differences
 
 - ESM entrypoint.
+- Named ESM export.
 - First-party TypeScript declarations.
 - Explicit `exports` map.
 - CommonJS compatibility shim generated from the TypeScript source.
 - Node runtime floor is >=18 rather than the legacy package's much older engine range.
 - Cross-platform Node 18–26 CI on Linux, Windows, and macOS.
 - macOS Intel smoke testing in addition to the primary macOS ARM64 runner.
+- The packed package is tested as a fresh ESM, CommonJS, and TypeScript consumer.
+
+## Not part of the compatibility promise
+
+- Undocumented deep imports into package internals.
+- Exact CommonJS function object property shape beyond callable root usage.
+- Support for Node versions below 18.
+- General JavaScript identifier validation.
 
 ## Intentional non-features
 

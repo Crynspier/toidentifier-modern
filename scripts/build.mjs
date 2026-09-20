@@ -36,6 +36,6 @@ await copyFile(resolve(cjsDir, 'index.js'), resolve(out, 'index-core.cjs'))
 
 await writeFile(
   resolve(out, 'index.cjs'),
-  "'use strict'\n\nconst mod = require('./index-core.cjs')\n\nmodule.exports = mod.default\nmodule.exports.default = mod.default\nmodule.exports.toIdentifier = mod.toIdentifier\n",
+  "'use strict'\n\nconst mod = require('./index-core.cjs')\n\nmodule.exports = mod.default\n",
   'utf8',
 )

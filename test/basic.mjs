@@ -37,10 +37,9 @@ test('function exposes expected arity and name', () => {
   assert.equal(toIdentifier.name, 'toIdentifier')
 })
 
-test('CommonJS export is callable and exposes named aliases', () => {
+test('CommonJS export is a callable legacy-style function', () => {
   const cjs = require('../dist/index.cjs')
   assert.equal(typeof cjs, 'function')
   assert.equal(cjs('Bad Request'), 'BadRequest')
-  assert.equal(cjs, cjs.default)
-  assert.equal(cjs, cjs.toIdentifier)
+  assert.equal(Object.keys(cjs), [])
 })

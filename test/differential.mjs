@@ -31,6 +31,15 @@ const samples = [
   '😀 hello',
   'ß test',
   'İ test',
+  'Αθήνα test',
+  'Москва test',
+  'مرحبا world',
+  'שלום world',
+  'ＡＢＣ test',
+  'e\u0301 test',
+  '𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test',
+  '\u200B hidden',
+  '\u202E rtl',
   'A B C',
   'a1 b2 c3',
   '!!!',
@@ -39,12 +48,15 @@ const samples = [
 
 function deterministicStrings(count) {
   let state = 0x12345678
-  const alphabet = ' abcXYZ012_-.@/' + String.fromCharCode(92, 9, 10) + '😀éß你好'
+  const alphabet =
+    ' abcXYZ012_-.@/' +
+    String.fromCharCode(92, 9, 10, 13) +
+    '😀éß你好ΑБЖمرحباשלוםＡＢＣe\u0301\u200B𝔘'
   const result = []
 
   for (let i = 0; i < count; i += 1) {
     let value = ''
-    const length = state % 24
+    const length = state % 32
 
     for (let j = 0; j < length; j += 1) {
       state = (state * 1664525 + 1013904223) >>> 0
@@ -63,10 +75,10 @@ for (const input of samples) {
   })
 }
 
-const fuzzInputs = deterministicStrings(2500)
+const differentialInputs = deterministicStrings(5000)
 
-test('matches legacy across deterministic 2500-input differential corpus', () => {
-  for (const input of fuzzInputs) {
+test('matches legacy across deterministic 5000-input Unicode differential corpus', () => {
+  for (const input of differentialInputs) {
     assert.equal(toIdentifier(input), legacy(input), JSON.stringify(input))
   }
 })

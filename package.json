@@ -1,6 +1,6 @@
 {
   "name": "toidentifier-modern",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modern, dependency-free TypeScript-first implementation of the toidentifier@1.0.1 API with ESM, CommonJS, and first-party types.",
   "license": "MIT",
   "type": "module",
@@ -33,7 +33,9 @@
     "typescript",
     "string",
     "string-utils",
-    "utility",
+    "string-to-identifier",
+    "identifier-converter",
+    "node",
     "nodejs",
     "esm",
     "commonjs"
@@ -42,12 +44,13 @@
     "clean": "node scripts/clean.mjs",
     "build": "node scripts/build.mjs",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run check && npm pack --dry-run",
+    "prepublishOnly": "npm run check && npm pack --dry-run --ignore-scripts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.types.json --noEmit",
-    "lint": "node scripts/lint.mjs",
-    "test": "npm run build && node --test test/basic.mjs test/differential.mjs test/fuzz.mjs",
-    "check": "npm run typecheck && npm run lint && npm test",
-    "pack:check": "npm run check && npm pack --dry-run"
+    "format:check": "node scripts/lint.mjs",
+    "lint": "npm run format:check",
+    "test": "npm run build && node --test test/basic.mjs test/differential.mjs test/fuzz.mjs test/large-input.mjs test/packed-package.mjs",
+    "check": "npm run typecheck && npm run format:check && npm test",
+    "pack:check": "npm run check && npm pack --dry-run --ignore-scripts"
   },
   "devDependencies": {
     "typescript": "5.8.3",
