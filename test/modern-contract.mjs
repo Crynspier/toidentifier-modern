@@ -23,6 +23,11 @@ const conversions = [
   ['مرحبا world', 'مرحباWorld'],
   ['שלום world', 'שלוםWorld'],
   ['Москва world', 'МоскваWorld'],
+  ['Αθήνα world', 'ΑθήναWorld'],
+  ['Αθήναworld', 'Αθήναworld'],
+  ['Москваworld', 'Москваworld'],
+  ['مرحباworld', 'مرحباWorld'],
+  ['שלוםworld', 'שלוםWorld'],
   ['e\u0301 test', 'ÉTest'],
   ['𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test', 'UnicodeTest'],
   ['ß', 'SS'],
@@ -41,6 +46,8 @@ const conversions = [
   ['foo\u200Dbar', 'Foo\u200Dbar'],
   ['\u200Cfoo', 'Foo'],
   ['foo\u200C', 'Foo\u200C'],
+  ['\u200Dfoo', 'Foo'],
+  ['foo\u200D', 'Foo\u200D'],
 ]
 
 for (const [input, expected] of conversions) {
