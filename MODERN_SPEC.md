@@ -26,9 +26,25 @@ Convert arbitrary text into a deterministic, readable JavaScript binding identif
 
 `isValidIdentifier()` checks JavaScript binding-identifier safety using Unicode identifier properties plus modern strict/module restrictions relevant to variable bindings.
 
-The implementation validates the actual string value and does not treat Unicode escape spellings as a separate identifier representation.
+The implementation validates the actual string value and does not treat Unicode escape spellings as a separate identifier representation. The validator is regression-tested against the JavaScript parser for thousands of generated candidates, with additional module-parser checks for module-reserved binding names.
 
 The converter does not promise idempotence: concatenating separate single-letter words can create a different case-boundary interpretation on a subsequent pass.
+
+## Runtime contract
+
+- `input` must be a string.
+- `options`, when provided, must be a non-null object and not an array.
+- `style` may be `pascal` or `camel`; omitted means `pascal`.
+- `normalize` may be boolean; omitted means `true`.
+- Invalid runtime values throw `TypeError`.
+
+## Normalization and collisions
+
+NFKC normalization can intentionally collapse distinct source strings to the same modern identifier. For example, `①` and `1`, `Å` and `Å`, `ﬁ` and `fi`, and fullwidth versus ASCII forms can produce identical results. The converter is deterministic, but it is not a uniqueness mechanism.
+
+## Invisible identifier continuation characters
+
+U+200C ZERO WIDTH NON-JOINER and U+200D ZERO WIDTH JOINER are valid JavaScript identifier continuation characters. The converter may preserve them when they occur inside or at the end of an input word; leading occurrences are removed because they cannot start a binding identifier. Applications with a visible-only identifier policy should reject or sanitize them separately.
 
 ## Examples
 
