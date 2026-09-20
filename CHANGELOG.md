@@ -20,7 +20,11 @@
 - `MODERN_SPEC.md`.
 - `MIGRATION.md`.
 - Modern validity and case-boundary regression tests.
-- Expanded packed-package API tests.
+- Parser-backed strict-binding and module-grammar verification.
+- Runtime option/input validation with explicit TypeError contracts.
+- Adversarial Unicode, normalization, boundary, collision, and invisible-character coverage.
+- Expanded legacy differential corpus.
+- Tightened packed-package surface checks.
 
 ### Compatibility
 
