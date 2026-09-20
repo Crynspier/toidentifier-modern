@@ -60,7 +60,16 @@ test('legacy helper matches published toidentifier@1.0.1 across 5000 determinist
 })
 
 test('legacy helper matches the published package on a long adversarial input', () => {
-  const chunk = '😀 café \\uD800 \\uDC00 你好 \\u0301 ABC_123 \\u0000 -/@'
+  const chunk =
+    '😀 café ' +
+    String.fromCharCode(0xd800) +
+    ' ' +
+    String.fromCharCode(0xdc00) +
+    ' 你好 ' +
+    String.fromCharCode(0x0301) +
+    ' ABC_123 ' +
+    String.fromCharCode(0, 1, 127) +
+    ' -/@'
   const input = chunk.repeat(2048)
 
   assert.equal(toIdentifierLegacy(input), legacy(input))
