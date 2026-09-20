@@ -10,6 +10,8 @@ The modern converter is designed for syntactic validity, not spoofing resistance
 
 The converter never evaluates input and has no runtime dependencies.
 
+U+200C ZERO WIDTH NON-JOINER and U+200D ZERO WIDTH JOINER are valid identifier continuation characters and may be preserved in generated names. They are invisible characters; applications that require human-visible identifiers should consider rejecting them explicitly.
+
 ## Release integrity
 
 The repository includes a release workflow intended for npm trusted publishing with GitHub Actions OIDC. Trusted publishing avoids long-lived npm publish tokens and enables npm provenance for public packages.
