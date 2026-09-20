@@ -50,6 +50,7 @@ const requiredFiles = new Set([
   'CHANGELOG.md',
   'dist/index.js',
   'dist/index.cjs',
+  'dist/index-core.cjs',
   'dist/index.d.ts',
 ])
 
