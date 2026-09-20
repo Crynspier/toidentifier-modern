@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
 import { dirname, resolve } from 'node:path'
+import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
 
@@ -57,6 +57,17 @@ for (const file of packResult.files.map((entry) => entry.path)) {
 const consumer = await mkdtemp(resolve(root, '.tmp-packed-consumer-'))
 const tarball = resolve(root, packResult.filename)
 
+const tsconfig = {
+  compilerOptions: {
+    strict: true,
+    noEmit: true,
+    module: 'NodeNext',
+    moduleResolution: 'NodeNext',
+    skipLibCheck: true,
+  },
+  files: ['types.ts'],
+}
+
 try {
   await writeFile(
     resolve(consumer, 'package.json'),
@@ -102,9 +113,14 @@ void b
 `,
   )
 
-  await writeFile(resolve(consumer, 'tsconfig.json'), tsconfigConsumer)\n\n  run(node, [resolve(consumer, 'esm-test.mjs')], { cwd: consumer })
+  await writeFile(
+    resolve(consumer, 'tsconfig.json'),
+    JSON.stringify(tsconfig, null, 2) + '\n',
+  )
+
+  run(node, [resolve(consumer, 'esm-test.mjs')], { cwd: consumer })
   run(node, [resolve(consumer, 'cjs-test.cjs')], { cwd: consumer })
-  run(node, [tsc, '--project', resolve(consumer, 'tsconfig.json')], { cwd: consumer })
+  run(tsc, ['--project', resolve(consumer, 'tsconfig.json')], { cwd: consumer })
 
   const installedPackageJson = JSON.parse(
     await readFile(resolve(consumer, 'node_modules', 'toidentifier-modern', 'package.json'), 'utf8'),
