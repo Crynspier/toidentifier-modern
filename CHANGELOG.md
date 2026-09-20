@@ -23,6 +23,8 @@
 - Parser-backed strict-binding and module-grammar verification.
 - Runtime option/input validation with explicit TypeError contracts.
 - Adversarial Unicode, normalization, boundary, collision, and invisible-character coverage.
+- Independent parser-oracle coverage for structured identifier candidates and module-reserved names.
+- Expanded combining-mark and NFKC collision regression coverage.
 - Expanded legacy differential corpus.
 - Tightened packed-package surface checks.
 
