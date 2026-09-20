@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.1 - 2026-09-20
+
+### Fixed
+
+- Removed a repeated-array-shift path from leading invalid-character trimming, preventing quadratic behavior on pathological Unicode inputs.
+- Added regression coverage with 100,000 leading combining marks.
+- Renamed the internal format-check script to reflect its actual scope while retaining `npm run lint` as a compatibility alias.
+
+### Compatibility
+
+No runtime API or semantic changes from 0.2.0.
+
 ## 0.2.0 - 2026-09-20
 
 ### Changed
