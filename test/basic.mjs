@@ -41,5 +41,5 @@ test('CommonJS export is a callable legacy-style function', () => {
   const cjs = require('../dist/index.cjs')
   assert.equal(typeof cjs, 'function')
   assert.equal(cjs('Bad Request'), 'BadRequest')
-  assert.equal(Object.keys(cjs), [])
+  assert.equal(Object.keys(cjs).length, 0)
 })
