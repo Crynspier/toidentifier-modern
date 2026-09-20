@@ -111,7 +111,7 @@ Generic casing libraries such as `camelcase` and `change-case` already cover bro
 - valid JavaScript binding identifier guarantee
 - PascalCase and camelCase modes
 - exact legacy compatibility helper
-- deterministic 10,000-input modern validity/idempotence corpus
+- deterministic 10,000-input modern validity corpus
 - 5,000-input legacy differential corpus
 - large-input validity coverage through 1 MiB
 - packed-tarball ESM, CommonJS, and TypeScript consumer tests
