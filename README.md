@@ -133,6 +133,7 @@ Generic casing libraries such as `camelcase` and `change-case` already cover bro
 - adversarial Unicode, normalization, boundary, and collision coverage
 - 5,000-input legacy differential corpus
 - large-input validity coverage through 1 MiB
+- pathological leading combining-mark regression coverage
 - packed-tarball ESM, CommonJS, and TypeScript consumer tests
 - Node 18/20/22/24/26 CI
 - Linux, Windows, macOS ARM64, and macOS Intel coverage
