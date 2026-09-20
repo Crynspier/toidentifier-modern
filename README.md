@@ -3,80 +3,123 @@
 [![CI](https://github.com/Crynspier/toidentifier-modern/actions/workflows/ci.yml/badge.svg)](https://github.com/Crynspier/toidentifier-modern/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/toidentifier-modern)](https://www.npmjs.com/package/toidentifier-modern)
 
-**A tiny, dependency-free, TypeScript-first modernization of the toidentifier@1.0.1 API.**
+**A tiny, dependency-free, Unicode-aware JavaScript identifier converter with first-party TypeScript, ESM, and CommonJS support.**
 
-`toidentifier-modern` preserves the established string-transformation behavior while adding modern ESM/CommonJS packaging and first-party TypeScript declarations.
+The modern default produces a valid JavaScript binding identifier instead of merely reproducing the historical ASCII string transformation.
 
 ## Install
 
-```sh
-npm install toidentifier-modern
-```
+`npm install toidentifier-modern`
 
 ## Usage
 
 ```js
-import toIdentifier from 'toidentifier-modern'
+import toIdentifier, { isValidIdentifier } from 'toidentifier-modern'
 
-toIdentifier('Bad Request')
-// => "BadRequest"
+toIdentifier('hello-world')
+// => "HelloWorld"
+
+toIdentifier('café crème')
+// => "CaféCrème"
+
+toIdentifier('404 not found')
+// => "_404NotFound"
+
+toIdentifier('Ｈｅｌｌｏ　ｗｏｒｌｄ')
+// => "HelloWorld"
+
+isValidIdentifier(toIdentifier('some input'))
+// => true
 ```
 
-CommonJS remains a callable single-function export:
+CommonJS remains a callable package-root export:
 
 ```js
 const toIdentifier = require('toidentifier-modern')
 
-toIdentifier('Bad Request')
-// => "BadRequest"
+toIdentifier('hello-world')
+// => "HelloWorld"
 ```
 
-Named ESM exports are also available:
+## Modern API
+
+`toIdentifier(input, options?)` supports:
+
+- `style: 'pascal' | 'camel'` — defaults to `'pascal'`.
+- `normalize: boolean` — defaults to `true` and applies Unicode NFKC before tokenization.
+
+The converter treats whitespace, punctuation, emoji, and underscores as word boundaries; recognizes lower-to-upper and acronym-to-word case boundaries; preserves Unicode identifier characters; and guarantees a strict/module-safe binding identifier.
+
+Examples:
 
 ```js
-import { toIdentifier } from 'toidentifier-modern'
+toIdentifier('hello world')
+// => "HelloWorld"
+
+toIdentifier('hello world', { style: 'camel' })
+// => "helloWorld"
+
+toIdentifier('XMLHttpRequest')
+// => "XmlHttpRequest"
+
+toIdentifier('foo.bar_baz-qux')
+// => "FooBarBazQux"
+
+toIdentifier('class', { style: 'camel' })
+// => "_class"
+
+toIdentifier('!!!')
+// => "_"
 ```
 
-## Compatibility
+No transliteration is performed: `你好 world` becomes `你好World`.
 
-The compatibility target is the published `toidentifier@1.0.1` package. The differential suite runs against the installed reference package on explicit edge cases and a deterministic 5,000-input Unicode corpus.
+## Legacy compatibility
 
-The legacy behavior is intentionally preserved:
+Version 0.1.x optimized for exact `toidentifier@1.0.1` behavior. Version 0.2.0 intentionally changes the default semantics.
 
-1. Split words only on literal U+0020 spaces.
-2. Uppercase the first character of each token.
-3. Concatenate the tokens.
-4. Remove characters outside ASCII letters, digits, and `_`.
+Use `toIdentifierLegacy()` when exact historical behavior is required:
 
-This package does **not** add Unicode normalization, general whitespace splitting, transliteration, or automatic string coercion.
+```js
+import { toIdentifierLegacy } from 'toidentifier-modern'
+
+toIdentifierLegacy('hello-world')
+// => "Helloworld"
+
+toIdentifierLegacy('404 not found')
+// => "404NotFound"
+```
+
+## Why this is not just another case-conversion package
+
+Generic casing libraries such as `camelcase` and `change-case` already cover broad text transformation. This package has a narrower correctness contract: the default result is a valid JavaScript binding identifier, while Unicode identifier characters are retained and the old `toidentifier` behavior remains available as an explicit migration API.
 
 ## Compatibility boundary
 
-`toidentifier-modern` aims for behavior compatibility, not byte-for-byte package compatibility.
-
-- **Behavior:** targets `toidentifier@1.0.1` behavior.
-- **CommonJS:** the package root remains a callable function, matching the legacy usage pattern.
-- **ESM:** default and named ESM exports are additions.
-- **Types:** first-party TypeScript declarations are additions.
-- **Node:** support is explicitly `>=18`, unlike the legacy package's much older declared engine range.
-- **Deep imports:** only the package root is exported; undocumented filesystem/deep imports are not part of the compatibility contract.
-- **Identifier validity:** output preserves the legacy transformation and is not guaranteed to satisfy ECMAScript identifier grammar. For example, `"404 not found"` becomes `"404NotFound"`.
+- **Modern default:** semantic modernization; legacy output is not promised.
+- **Legacy helper:** targets `toidentifier@1.0.1` and is differentially tested against the published package.
+- **CommonJS:** package-root `require()` remains callable.
+- **ESM:** default and named exports are available.
+- **Types:** first-party TypeScript declarations are shipped.
+- **Node:** support is explicitly `>=18`.
+- **Deep imports:** only the package root is public.
 
 ## Quality
 
 - zero runtime dependencies
-- ESM + CommonJS
-- first-party TypeScript declarations
-- differential tests against toidentifier@1.0.1
-- deterministic 5,000-input Unicode differential corpus
-- deterministic 10,000-input local behavior corpus
-- large-input differential regression coverage
+- Unicode-aware NFKC normalization
+- valid JavaScript binding identifier guarantee
+- PascalCase and camelCase modes
+- exact legacy compatibility helper
+- deterministic 10,000-input modern validity/idempotence corpus
+- 5,000-input legacy differential corpus
+- large-input validity coverage through 1 MiB
 - packed-tarball ESM, CommonJS, and TypeScript consumer tests
 - Node 18/20/22/24/26 CI
-- Linux, Windows, macOS ARM64, and macOS Intel smoke-test coverage
+- Linux, Windows, macOS ARM64, and macOS Intel coverage
 
 ```sh
-npm install
+npm ci
 npm run check
 npm run pack:check
 ```
