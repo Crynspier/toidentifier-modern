@@ -14,12 +14,14 @@ function run(command, args, options = {}) {
     cwd: root,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
+    shell: process.platform === 'win32' && command.toLowerCase().endsWith('.cmd'),
     ...options,
   })
 
   if (result.status !== 0) {
+    const error = result.error ? `\n${result.error.message}` : ''
     throw new Error(
-      `${command} ${args.join(' ')} failed (exit ${result.status}):\n${result.stdout}\n${result.stderr}`,
+      `${command} ${args.join(' ')} failed (exit ${result.status}):${error}\n${result.stdout}\n${result.stderr}`,
     )
   }
 
