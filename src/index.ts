@@ -118,18 +118,19 @@ function splitWords(input: string): string[] {
 
 function trimLeadingNonStarts(word: string): string {
   const chars = Array.from(word)
+  let start = 0
 
-  while (chars.length > 0) {
-    const first = chars[0]
+  while (start < chars.length) {
+    const first = chars[start]
 
     if (first === '$' || isIdentifierStartChar(first) || isDecimalNumber(first)) {
-      return chars.join('')
+      break
     }
 
-    chars.shift()
+    start += 1
   }
 
-  return ''
+  return chars.slice(start).join('')
 }
 
 function capitalizeWord(word: string): string {
