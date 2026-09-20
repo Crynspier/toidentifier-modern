@@ -1,6 +1,6 @@
 {
   "name": "toidentifier-modern",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Modern, dependency-free JavaScript identifier conversion with Unicode-aware semantics, valid-identifier guarantees, ESM, CommonJS, and TypeScript.",
   "license": "MIT",
   "type": "module",
@@ -50,8 +50,8 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run check && npm pack --dry-run --ignore-scripts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.types.json --noEmit",
-    "format:check": "node scripts/lint.mjs",
-    "lint": "npm run format:check",
+    "format:check": "node scripts/format-check.mjs",
+    "lint": "node scripts/format-check.mjs",
     "test": "npm run build && node --test test/basic.mjs test/modern-contract.mjs test/parser.mjs test/validator-oracle.mjs test/differential.mjs test/fuzz.mjs test/large-input.mjs test/packed-package.mjs",
     "check": "npm run typecheck && npm run format:check && npm test",
     "pack:check": "npm run check && npm pack --dry-run --ignore-scripts"
