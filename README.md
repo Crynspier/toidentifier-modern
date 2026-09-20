@@ -48,7 +48,7 @@ toIdentifier('hello-world')
 - `style: 'pascal' | 'camel'` — defaults to `'pascal'`.
 - `normalize: boolean` — defaults to `true` and applies Unicode NFKC before tokenization.
 
-The converter treats whitespace, punctuation, emoji, and underscores as word boundaries; recognizes lower-to-upper and acronym-to-word case boundaries; preserves Unicode identifier characters; and guarantees a strict/module-safe binding identifier.
+The converter treats whitespace, punctuation, emoji, and underscores as word boundaries; recognizes lower-to-upper and acronym-to-word case boundaries; preserves Unicode identifier characters; and guarantees a strict/module-safe binding identifier. At runtime, the API requires a string input, an object of options, a supported `style`, and a boolean `normalize` value.
 
 Examples:
 
@@ -73,6 +73,21 @@ toIdentifier('!!!')
 ```
 
 No transliteration is performed: `你好 world` becomes `你好World`.
+
+### Runtime validation
+
+JavaScript callers receive deterministic `TypeError` exceptions for invalid runtime inputs:
+
+```js
+toIdentifier(123)
+// TypeError: input must be a string
+
+toIdentifier('hello', { style: 'wat' })
+// TypeError: options.style must be "pascal" or "camel"
+
+toIdentifier('hello', { normalize: 'yes' })
+// TypeError: options.normalize must be a boolean
+```
 
 ## Legacy compatibility
 
@@ -112,6 +127,9 @@ Generic casing libraries such as `camelcase` and `change-case` already cover bro
 - PascalCase and camelCase modes
 - exact legacy compatibility helper
 - deterministic 10,000-input modern validity corpus
+- parser-backed strict-binding verification across 5,000 generated candidates
+- module-parser checks for reserved binding words
+- adversarial Unicode, normalization, boundary, and collision coverage
 - 5,000-input legacy differential corpus
 - large-input validity coverage through 1 MiB
 - packed-tarball ESM, CommonJS, and TypeScript consumer tests
