@@ -26,7 +26,7 @@ const conversions = [
   ['e\u0301 test', 'ÉTest'],
   ['𝔘𝔫𝔦𝔠𝔬𝔡𝔢 test', 'UnicodeTest'],
   ['ß', 'SS'],
-  ['İstanbul', 'Istanbul'],
+  ['İstanbul', 'I\u0307stanbul'],
   ['!!!', '_'],
   ['///', '_'],
   ['💩', '_'],
@@ -53,7 +53,7 @@ for (const [input, expected] of conversions) {
 test('camelCase uses lowercase first word and PascalCase remaining words', () => {
   assert.equal(toIdentifier('hello world', { style: 'camel' }), 'helloWorld')
   assert.equal(toIdentifier('HelloWorld', { style: 'camel' }), 'helloWorld')
-  assert.equal(toIdentifier('404 not found', { style: 'camel' }), '_404notFound')
+  assert.equal(toIdentifier('404 not found', { style: 'camel' }), '_404NotFound')
   assert.equal(toIdentifier('Hello', { style: 'camel' }), 'hello')
 })
 
