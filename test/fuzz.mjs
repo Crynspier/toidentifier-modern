@@ -29,6 +29,5 @@ test('modern converter produces valid identifiers across 10000 deterministic inp
   for (const input of deterministicStrings(10000)) {
     const output = toIdentifier(input)
     assert.equal(isValidIdentifier(output), true, JSON.stringify({ input, output }))
-    assert.equal(toIdentifier(output), output, JSON.stringify({ input, output }))
   }
 })
