@@ -90,7 +90,7 @@ try {
     resolve(consumer, 'esm-test.mjs'),
     "import assert from 'node:assert/strict'\n" +
       "import toIdentifier, { isValidIdentifier, toIdentifierLegacy } from 'toidentifier-modern'\n\n" +
-      "assert.equal(toIdentifier('hello-world'), 'HelloWorld')\n" +
+      "assert.equal(toIdentifier('hello-world'), 'HelloWorld')\nassert.equal(toIdentifier.toIdentifier('hello-world'), 'HelloWorld')\nassert.equal(toIdentifier.toIdentifierLegacy('hello-world'), 'Helloworld')\nassert.equal(toIdentifier.isValidIdentifier('_404NotFound'), true)\n" +
       "assert.equal(isValidIdentifier(toIdentifier('404 not found')), true)\n" +
       "assert.equal(toIdentifierLegacy('hello-world'), 'Helloworld')\n",
   )
