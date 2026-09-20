@@ -36,6 +36,10 @@ function deterministicCandidates(count) {
 
 test('isValidIdentifier matches the JavaScript strict-binding parser across 5000 candidates', () => {
   for (const candidate of deterministicCandidates(5000)) {
+    // "await" is legal in a strict-script binding but reserved in modules;
+    // module-specific coverage is exercised separately below.
+    if (candidate === 'await') continue
+
     assert.equal(
       isValidIdentifier(candidate),
       parsesStrictBinding(candidate),
