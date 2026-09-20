@@ -80,7 +80,7 @@ test('combining marks remain attached to identifier characters across Unicode an
   assert.equal(toIdentifier('你好\u0301 test'), '你好́Test')
   assert.equal(toIdentifier('foo\u0301-bar'), 'FoóBar')
   assert.equal(toIdentifier('\u0301foo'), 'Foo')
-  assert.equal(toIdentifier('foo\u0301\u0323_bar'), 'Foọ́Bar')
+  assert.equal(toIdentifier('foo\u0301\u0323_bar'), 'Foọ́Bar')
   assert.equal(toIdentifier('e\u0301\u0323 test', { normalize: false }), 'Ẹ́Test')
   assert.equal(isValidIdentifier('foo\u0301\u0323'), true)
 })
