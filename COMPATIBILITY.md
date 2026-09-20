@@ -27,6 +27,7 @@ The default `toIdentifier` is intentionally different and provides:
 - strict/module-safe binding-identifier validity;
 - reserved-word avoidance;
 - PascalCase and camelCase styles.
+- Runtime validation rejects non-string inputs, invalid option objects, unsupported styles, and non-boolean normalization flags.
 
 ## Packaging compatibility
 
