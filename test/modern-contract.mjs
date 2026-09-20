@@ -74,6 +74,17 @@ test('normalization can be disabled', () => {
   assert.equal(toIdentifier('e\u0301 test', { normalize: false }), 'E\u0301Test')
 })
 
+
+test('combining marks remain attached to identifier characters across Unicode and normalization boundaries', () => {
+  assert.equal(toIdentifier('e\u0301\u0323 test'), 'Ẹ́Test')
+  assert.equal(toIdentifier('你好\u0301 test'), '你好́Test')
+  assert.equal(toIdentifier('foo\u0301-bar'), 'FoóBar')
+  assert.equal(toIdentifier('\u0301foo'), 'Foo')
+  assert.equal(toIdentifier('foo\u0301\u0323_bar'), 'Foọ́Bar')
+  assert.equal(toIdentifier('e\u0301\u0323 test', { normalize: false }), 'Ẹ́Test')
+  assert.equal(isValidIdentifier('foo\u0301\u0323'), true)
+})
+
 test('runtime validation rejects invalid input and options', () => {
   assert.throws(() => toIdentifier(123), /input must be a string/)
   assert.throws(() => toIdentifier(null), /input must be a string/)
@@ -149,6 +160,9 @@ test('NFKC collisions are deterministic and documented as possible', () => {
   assert.equal(toIdentifier('Å'), toIdentifier('Å'))
   assert.equal(toIdentifier('ﬁ'), toIdentifier('fi'))
   assert.equal(toIdentifier('Ｈｅｌｌｏ'), toIdentifier('Hello'))
+  assert.equal(toIdentifier('²'), toIdentifier('2'))
+  assert.equal(toIdentifier('K'), toIdentifier('K'))
+  assert.equal(toIdentifier('ﬃ'), toIdentifier('ffi'))
 })
 
 test('isValidIdentifier accepts Unicode identifier continuation marks but not zero-width space', () => {
