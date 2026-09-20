@@ -13,7 +13,8 @@ Convert arbitrary text into a deterministic, readable JavaScript binding identif
 3. Treat `$` as an identifier-aware boundary marker, so `foo$bar` becomes `Foo$Bar`.
 4. Split internal case boundaries:
    - lowercase letter followed by uppercase letter;
-   - uppercase acronym followed by a capitalized word.
+   - uppercase acronym followed by a capitalized word;
+   - boundaries between cased and uncased identifier scripts.
 5. Lowercase each word with JavaScript's Unicode-aware `toLowerCase()`.
 6. For PascalCase, uppercase the first letter-like character of each word. For camelCase, lowercase the first word and PascalCase the remaining words.
 7. Preserve valid Unicode identifier characters and combining marks.
@@ -26,6 +27,8 @@ Convert arbitrary text into a deterministic, readable JavaScript binding identif
 `isValidIdentifier()` checks JavaScript binding-identifier safety using Unicode identifier properties plus modern strict/module restrictions relevant to variable bindings.
 
 The implementation validates the actual string value and does not treat Unicode escape spellings as a separate identifier representation.
+
+The converter does not promise idempotence: concatenating separate single-letter words can create a different case-boundary interpretation on a subsequent pass.
 
 ## Examples
 
