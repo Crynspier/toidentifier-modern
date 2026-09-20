@@ -18,9 +18,9 @@ function run(command, args, options = {}) {
   })
 
   if (result.status !== 0) {
-    const error = result.error ? `\n${result.error.message}` : ''
+    const error = result.error ? '\n' + result.error.message : ''
     throw new Error(
-      `${command} ${args.join(' ')} failed (exit ${result.status}):${error}\n${result.stdout}\n${result.stderr}`,
+      command + ' ' + args.join(' ') + ' failed (exit ' + result.status + '):' + error + '\n' + result.stdout + '\n' + result.stderr,
     )
   }
 
@@ -43,6 +43,8 @@ const requiredFiles = new Set([
   'package.json',
   'README.md',
   'COMPATIBILITY.md',
+  'MIGRATION.md',
+  'MODERN_SPEC.md',
   'SECURITY.md',
   'LICENSE',
   'CHANGELOG.md',
@@ -52,14 +54,14 @@ const requiredFiles = new Set([
 ])
 
 for (const file of requiredFiles) {
-  assert.ok(packResult.files.some((entry) => entry.path === file), `missing packed file: ${file}`)
+  assert.ok(packResult.files.some((entry) => entry.path === file), 'missing packed file: ' + file)
 }
 
 for (const file of packResult.files.map((entry) => entry.path)) {
-  assert.equal(file.startsWith('test/'), false, `tests leaked into package: ${file}`)
-  assert.equal(file.startsWith('scripts/'), false, `scripts leaked into package: ${file}`)
-  assert.equal(file.startsWith('.github/'), false, `CI files leaked into package: ${file}`)
-  assert.equal(file.startsWith('node_modules/'), false, `node_modules leaked into package: ${file}`)
+  assert.equal(file.startsWith('test/'), false, 'tests leaked into package: ' + file)
+  assert.equal(file.startsWith('scripts/'), false, 'scripts leaked into package: ' + file)
+  assert.equal(file.startsWith('.github/'), false, 'CI files leaked into package: ' + file)
+  assert.equal(file.startsWith('node_modules/'), false, 'node_modules leaked into package: ' + file)
 }
 
 const consumer = await mkdtemp(resolve(root, '.tmp-packed-consumer-'))
@@ -79,52 +81,41 @@ const tsconfig = {
 try {
   await writeFile(
     resolve(consumer, 'package.json'),
-    JSON.stringify({
-      name: 'packed-consumer',
-      private: true,
-      type: 'module',
-    }, null, 2) + '\n',
+    JSON.stringify({ name: 'packed-consumer', private: true, type: 'module' }, null, 2) + '\n',
   )
 
   runNpm(['install', tarball, '--ignore-scripts', '--package-lock=false'], { cwd: consumer })
 
   await writeFile(
     resolve(consumer, 'esm-test.mjs'),
-    `import assert from 'node:assert/strict'
-import toIdentifier, { toIdentifier as named } from 'toidentifier-modern'
-
-assert.equal(toIdentifier, named)
-assert.equal(toIdentifier('Bad Request'), 'BadRequest')
-`,
+    "import assert from 'node:assert/strict'\n" +
+      "import toIdentifier, { isValidIdentifier, toIdentifierLegacy } from 'toidentifier-modern'\n\n" +
+      "assert.equal(toIdentifier('hello-world'), 'HelloWorld')\n" +
+      "assert.equal(isValidIdentifier(toIdentifier('404 not found')), true)\n" +
+      "assert.equal(toIdentifierLegacy('hello-world'), 'Helloworld')\n",
   )
 
   await writeFile(
     resolve(consumer, 'cjs-test.cjs'),
-    `const assert = require('node:assert/strict')
-const toIdentifier = require('toidentifier-modern')
-
-assert.equal(typeof toIdentifier, 'function')
-assert.equal(Object.keys(toIdentifier).length, 0)
-assert.equal(toIdentifier('Bad Request'), 'BadRequest')
-`,
+    "const assert = require('node:assert/strict')\n" +
+      "const toIdentifier = require('toidentifier-modern')\n\n" +
+      "assert.equal(typeof toIdentifier, 'function')\n" +
+      "assert.equal(Object.keys(toIdentifier).length, 0)\n" +
+      "assert.equal(toIdentifier('hello-world'), 'HelloWorld')\n",
   )
 
   await writeFile(
     resolve(consumer, 'types.ts'),
-    `import toIdentifier, { toIdentifier as named } from 'toidentifier-modern'
-
-const a: string = toIdentifier('Bad Request')
-const b: string = named('Bad Request')
-
-void a
-void b
-`,
+    "import toIdentifier, { isValidIdentifier, toIdentifierLegacy, type ToIdentifierOptions } from 'toidentifier-modern'\n\n" +
+      "const a: string = toIdentifier('Bad Request')\n" +
+      "const b: string = toIdentifier('Bad Request', { style: 'camel' })\n" +
+      "const c: boolean = isValidIdentifier(a)\n" +
+      "const d: string = toIdentifierLegacy('Bad Request')\n" +
+      "const options: ToIdentifierOptions = { style: 'pascal', normalize: true }\n\n" +
+      "void a\nvoid b\nvoid c\nvoid d\nvoid options\n",
   )
 
-  await writeFile(
-    resolve(consumer, 'tsconfig.json'),
-    JSON.stringify(tsconfig, null, 2) + '\n',
-  )
+  await writeFile(resolve(consumer, 'tsconfig.json'), JSON.stringify(tsconfig, null, 2) + '\n')
 
   run(node, [resolve(consumer, 'esm-test.mjs')], { cwd: consumer })
   run(node, [resolve(consumer, 'cjs-test.cjs')], { cwd: consumer })
@@ -134,7 +125,7 @@ void b
     await readFile(resolve(consumer, 'node_modules', 'toidentifier-modern', 'package.json'), 'utf8'),
   )
   assert.equal(installedPackageJson.version, packResult.version)
-  assert.equal(installedPackageJson.version, '0.1.1')
+  assert.equal(installedPackageJson.version, '0.2.0')
 } finally {
   await rm(tarball, { force: true })
   await rm(consumer, { recursive: true, force: true })
