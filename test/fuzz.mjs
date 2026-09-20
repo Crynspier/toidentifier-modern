@@ -2,6 +2,15 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import toIdentifier, { isValidIdentifier } from '../dist/index.js'
 
+function parsesStrictBinding(candidate) {
+  try {
+    new Function('"use strict"; let ' + candidate + ' = 1')
+    return true
+  } catch {
+    return false
+  }
+}
+
 function deterministicStrings(count) {
   let state = 0x9e3779b9
   const alphabet =
@@ -29,5 +38,6 @@ test('modern converter produces valid identifiers across 10000 deterministic inp
   for (const input of deterministicStrings(10000)) {
     const output = toIdentifier(input)
     assert.equal(isValidIdentifier(output), true, JSON.stringify({ input, output }))
+    assert.equal(parsesStrictBinding(output), true, JSON.stringify({ input, output }))
   }
 })
