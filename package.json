@@ -1,7 +1,7 @@
 {
   "name": "toidentifier-modern",
-  "version": "0.1.1",
-  "description": "Modern, dependency-free TypeScript-first implementation of the toidentifier@1.0.1 API with ESM, CommonJS, and first-party types.",
+  "version": "0.2.0",
+  "description": "Modern, dependency-free JavaScript identifier conversion with Unicode-aware semantics, valid-identifier guarantees, ESM, CommonJS, and TypeScript.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -11,6 +11,8 @@
     "dist",
     "README.md",
     "COMPATIBILITY.md",
+    "MIGRATION.md",
+    "MODERN_SPEC.md",
     "SECURITY.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -28,17 +30,19 @@
   "sideEffects": false,
   "keywords": [
     "toidentifier",
+    "javascript-identifier",
+    "valid-identifier",
     "identifier",
-    "javascript",
-    "typescript",
-    "string",
-    "string-utils",
-    "string-to-identifier",
     "identifier-converter",
-    "node",
+    "identifier-generator",
+    "unicode",
+    "pascal-case",
+    "camel-case",
+    "typescript",
     "nodejs",
     "esm",
-    "commonjs"
+    "commonjs",
+    "npm"
   ],
   "scripts": {
     "clean": "node scripts/clean.mjs",
