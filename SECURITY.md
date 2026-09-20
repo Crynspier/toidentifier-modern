@@ -4,6 +4,12 @@
 
 Only the latest published toidentifier-modern release is supported with security fixes.
 
+## Identifier security
+
+The modern converter is designed for syntactic validity, not spoofing resistance. NFKC normalization does not make visually confusable identifiers unique or safe against homoglyph attacks. Applications that expose generated identifiers across trust boundaries should apply their own policy for length, allowed scripts, uniqueness, and confusable detection.
+
+The converter never evaluates input and has no runtime dependencies.
+
 ## Release integrity
 
 The repository includes a release workflow intended for npm trusted publishing with GitHub Actions OIDC. Trusted publishing avoids long-lived npm publish tokens and enables npm provenance for public packages.
